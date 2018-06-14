@@ -3,10 +3,6 @@
 #### Introduction
 LogAgent is a high-performance log collection client written in golang.
 
-#### 软件架构
-软件架构说明
-
-
 #### Environment
 
 1. go
