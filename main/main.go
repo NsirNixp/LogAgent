@@ -1,6 +1,7 @@
 package main
 
 import (
+	"LogCollectAgent/etcd"
 	"LogCollectAgent/kafka"
 	"LogCollectAgent/tailf"
 	"fmt"
@@ -41,8 +42,15 @@ func main() {
 	// 	}
 	// }()
 
+	// 初始化etcd
+	collectionConf, err := etcd.InitEtcd(appConfig.EtcdConf.Address, appConfig.EtcdConf.Key, ips)
+	if err != nil {
+		fmt.Printf("InitEtcd error. [error=%v]\n", err)
+		panic("Failed to init etcd component.Please make sure that the configuration is right")
+	}
+
 	// 初始化tailf
-	err = tailf.InitTailf(appConfig.CollectConf, appConfig.ChanSize)
+	err = tailf.InitTailf(collectionConf, appConfig.ChanSize)
 	if err != nil {
 		fmt.Printf("initTailf error. [error=%v]\n", err)
 		panic("Failed to init tailf component.Please make sure that the configuration is right")
@@ -50,7 +58,7 @@ func main() {
 	fmt.Printf("tailf.InitTailf()...\n")
 
 	// 初始化kafka
-	err = kafka.InitKafka(appConfig.KafkaConf.ProducerAddress)
+	err = kafka.InitKafka(appConfig.KafkaConf.Address)
 	if err != nil {
 		fmt.Printf("InitKafka error. [error=%v]\n", err)
 		panic("Failed to init kafka component.Please make sure that the configuration is right")

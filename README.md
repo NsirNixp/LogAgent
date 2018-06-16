@@ -3,6 +3,11 @@
 #### Introduction
 LogAgent is a high-performance log collection client written in golang.
 
+#### New
+
+1. Optimized the origin code
+2. Integrated etcd and separate the machine configuration to etcd
+
 #### Environment
 
 1. go
@@ -16,6 +21,7 @@ LogAgent is a high-performance log collection client written in golang.
 3. Creating a configuration file(tips: you can see the default configuration inside the folder `conf/logAgent.conf` on this repo)
 
 #### Future
-1. Connect to etcd
+
+1. <del>Connect to etcd</del>
 2. Add to es
 3. Web Frontend

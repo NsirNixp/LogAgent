@@ -47,7 +47,13 @@ func loadConf(confType, filename string) (err error) {
 	}
 
 	// kafka
-	kafkaProducerAddress, err := loadKafkaConf(conf)
+	kafkaAddress, err := loadKafkaConf(conf)
+	if err != nil {
+		return
+	}
+
+	// etcd
+	etcdAddress, etcdKey, err := loadEtcdConf(conf)
 	if err != nil {
 		return
 	}
@@ -55,19 +61,38 @@ func loadConf(confType, filename string) (err error) {
 	appConfig.AppLogLevel = appLogLevel
 	appConfig.AppLogPath = appLogPath
 	appConfig.ChanSize = chanSize
-	appConfig.KafkaConf.ProducerAddress = kafkaProducerAddress
-
+	appConfig.KafkaConf.Address = kafkaAddress
+	appConfig.EtcdConf.Address = etcdAddress
+	appConfig.EtcdConf.Key = etcdKey
 	fmt.Printf("Load conf finished,[AppConfig=%v]\n", appConfig)
+	return
+}
+
+/*
+ * 读取etcd节点
+ */
+func loadEtcdConf(conf config.Configer) (etcdAddress string, etcdKey string, err error) {
+	etcdAddress = conf.String("etcd::etcd_address")
+	if len(etcdAddress) == 0 {
+		fmt.Printf("Failed to Load configuration [etcd::etcd_address]\n")
+		return
+	}
+	etcdKey = conf.String("etcd::etcd_key")
+	if len(etcdKey) == 0 {
+		fmt.Printf("Failed to Load configuration [etcd::etcd_key]\n")
+		return
+	}
+
 	return
 }
 
 /*
  * 读取kafka节点
  */
-func loadKafkaConf(conf config.Configer) (kafkaProducerAddress string, err error) {
-	kafkaProducerAddress = conf.String("kafka::kafka_producer_address")
-	if len(kafkaProducerAddress) == 0 {
-		fmt.Printf("Failed to Load configuration [kafka::kafka_producer_address]\n")
+func loadKafkaConf(conf config.Configer) (kafkaAddress string, err error) {
+	kafkaAddress = conf.String("kafka::kafka_address")
+	if len(kafkaAddress) == 0 {
+		fmt.Printf("Failed to Load configuration [kafka::kafka_address]\n")
 		return
 	}
 	return

@@ -1,6 +1,9 @@
 package model
 
 import (
+	"sync"
+
+	etcdClient "github.com/coreos/etcd/clientv3"
 	"github.com/hpcloud/tail"
 )
 
@@ -13,18 +16,24 @@ type Config struct {
 	CollectConf []CollectConf // 收集日志信息基本
 	ChanSize    int
 	KafkaConf
+	EtcdConf
 }
 
 /**
  * 一台机器的收集配置信息
  */
 type CollectConf struct {
-	LogPath string // 收集日志存放地址
-	Topic   string // kafka消费topic
+	LogPath string `json:"logpath"` // 收集日志存放地址
+	Topic   string `json:"topic"`   // kafka消费topic
 }
 
 type KafkaConf struct {
-	ProducerAddress string
+	Address string
+}
+
+type EtcdConf struct {
+	Address string
+	Key     string
 }
 
 /**
@@ -39,8 +48,10 @@ type TextMsg struct {
  * 日志扫描信息
  */
 type TailObject struct {
-	Tail *tail.Tail  // 日志查看对象
-	Conf CollectConf // 一台机器的收集配置
+	Tail     *tail.Tail  // 日志查看对象
+	Conf     CollectConf // 一台机器的收集配置
+	Status   int         // 状态：标记当前tail实例状态
+	ExitChan chan bool   // 退出标记：true == <- ExitChan 表示该channel已完成/被结束
 }
 
 /**
@@ -49,4 +60,14 @@ type TailObject struct {
 type TailList struct {
 	TailList []*TailObject
 	MsgChan  chan *TextMsg // 发送kafka消息的channel
+	// Lock     sync.RWMutex
+	Lock sync.Mutex
+}
+
+/**
+ * etcd实例
+ */
+type Etcd struct {
+	Client *etcdClient.Client // etcd客户端实例
+	Keys   []string           // 本机日志文件配置对应在etcd中的key {"/logagent/conf/logs/178.156.133.22","/logagent/conf/logs/178.156.133.21"}
 }
