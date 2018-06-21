@@ -17,7 +17,7 @@ func main() {
 	// 加载配置文件
 	// filename := "./src/LogCollectAgent/conf/logAgent.conf"
 	// filename := "D:/4-学习空间/golang/learning/src/LogCollectAgent/conf/logAgent.conf"
-	filename := "./conf/logAgent.conf"
+	filename := "./conf/log_agent.conf"
 	err := loadConf(INI, filename)
 	if err != nil {
 		fmt.Printf("Load the configuration error. [error=%v]\n", err)
