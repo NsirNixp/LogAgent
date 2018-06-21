@@ -22,8 +22,8 @@ LogAgent is a high-performance log collection client written in golang.
 
 #### Future
 
-1. <del>Connect to etcd</del>
-2. Add to es
+1. <del>Connect to etcd</del> Finish!
+2. <del>Add to es</del> Finish!
 3. Web Frontend
 
 
