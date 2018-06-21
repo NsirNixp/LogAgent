@@ -29,9 +29,5 @@ LogAgent is a high-performance log collection client written in golang.
 
 
 #### Other Repository
-1. [Another LogAgent][1]
-2. [Another LogAgent][2]
-
-- - -
-[1]: "https://github.com/Charelyz/LogAgent" "Another LogAgent Github"
-[2]: "https://gitee.com/Charelyz/LogAgent" "Another LogAgent Gitee"
+1. [Another LogAgent Github](https://github.com/Charelyz/LogAgent)
+2. [Another LogAgent Gitee](https://gitee.com/Charelyz/LogAgent)
